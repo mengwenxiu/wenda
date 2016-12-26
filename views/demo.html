@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 
+    表单默认有一个 enctype 数据提交类型
+    enctype 决定了发起请求的时候数据采用什么格式
+    默认的 enctype 是 application/x-www-form-urlencoded
+   -->
+  <form action="/demo" method="post" enctype="application/json">
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <input type="submit" value="提交">
+  </form>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script>
+    // 在新标准中，推荐将提交的数据提交为 json 格式字符串
+    // 表单提交有多种格式，具体采用哪种格式，需要看后台的需求
+    // 一般默认都是 application/x-www-form-urlencoded，这种数据其实就是将要提交的数据转为查询字符串
+    // 但是如果想要提交复杂结构的数据，则可以使用 application/json 格式提交，可以直接提交 JSON 格式字符串，比较方便
+    // 注意：使用 application/json 必须使用 ajax 才有效，在 ajax 中，将提交的 Content-Type 指定为 application/json 即可，同时提交数据必须是一个 JSON 格式字符串，这样服务器收到的就是一个 JSON 格式字符串了，解析也比较方便
+    // 由于这种方式存在兼容性问题，所以在移动端使用比较居多
+    $('form').on('submit', function (e) {
+      $.ajax({
+        url: '/demo',
+        type: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          username: 'admin',
+          password: '123456'
+        }),
+        success: function (data) {
+          console.log(data)
+        }
+      })
+      return false
+    })
+  </script>
+</body>
+</html>
